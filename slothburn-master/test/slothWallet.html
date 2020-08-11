@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="us-ascii">
+  <title>sw</title>
+
+  <script src="slothWallet/elliptic.js"></script>
+  <script src="slothWallet/is.js"></script>
+  <script src="slothWallet/helpers.js"></script>
+  <script src="slothWallet.js"></script>
+
+  <script> $ = id => document.getElementById(id)</script>
+  <style>* { white-space: pre; font-family: monospace }</style>
+</head>
+<body>
+  Slothburn POC Wallet v2
+
+  Example accounts
+  ============================================================================
+  God secret: 90d5107840b7708e1d9688a438bfeaa542e705ca0fff1c31b73b1cb859789582
+  God pubkey: 7310277b1c4e222adfe527308c021b290822e97d6544edc9bfc45e158bde841a
+
+  Abe secret: 1111111111111111111111111111111111111111111111111111111111111111
+  Abe pubkey: d04ab232742bb4ab3a1368bd4615e4e6d0224ab71a016baf8520a332c9778737
+
+  Bob secret: 2222222222222222222222222222222222222222222222222222222222222222
+  Bob pubkey: a09aa5f47a6759802ff955f8dc2d2a14a5c99d23be97f864127ff9383455a4f0
+  ============================================================================
+
+  SERVER
+  <input id=server value=127.0.0.1:9999>
+
+  GET BALANCE
+  <input id=pubkey0 size=69><input id=getBalance type=button value=OK>
+  <script>
+    $("getBalance").onclick = () => slothWallet.getBalance($("pubkey0").value, $("server").value)
+  </script>
+
+  SEND TRANSACTION
+  secret: <input id=sendSecret size=69>
+  to:     <input id=sendTo     size=69>
+  net:    <input id=sendNet    size=10>
+  <input type=button id=send value=SEND> <input type=button id=sendAbort value=ABORT disabled>
+  <script>
+    const used = []
+    $("send").onclick = async () => {
+      console.log("Sending transaction. May take up to 30 seconds...")
+      $("send").disabled = true
+      $("sendAbort").disabled = false
+
+      const signals = {}
+      signals.commit = () => {
+        console.log("Sending commit signal - disabling abort button")
+        if (signals.aborted)
+          throw Error("Can't commit to aborted transaction")
+        $("sendAbort").disabled = true
+        signals.committed = true
+      }
+      $("sendAbort").onclick = signals.abort = () => {
+        console.warn("Sending abort signal - may need to wait for sleep timeout...")
+        if (signals.aborted)
+          throw Error("Can't commit to aborted transaction")
+        $("sendAbort").disabled = true
+        signals.aborted = true
+      }
+
+      const server = $("server").value
+      const secret = $("sendSecret").value
+      const to     = $("sendTo").value
+      const net    = $("sendNet").value
+
+      try {
+        await slothWallet.send({secret, to, net, server, signals, used})
+      } catch (e) {
+        console.error(e)
+      }
+
+      $("sendAbort").disabled = true
+      $("send").disabled = false
+    }
+  </script>
+  SEE CONSOLE (F12)
+</body>
+</html>

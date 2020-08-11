@@ -1,0 +1,16 @@
+{
+  "name": "slothburn",
+  "version": "0.2.0",
+  "description": "Slothburn POC Server v2",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dylan Sharhon",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "elliptic": "^6.5.0",
+    "hash.js": "^1.1.7",
+    "node-fetch": "^2.6.0"
+  }
+}

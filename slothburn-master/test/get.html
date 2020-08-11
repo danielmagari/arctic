@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GET</title>
+    <style>
+      body, input {
+        font-family: monospace;
+        white-space: pre;
+      }
+      body {
+        background: lightblue;
+        min-width: 480px;
+        margin: 16px;
+      }
+      div {
+        background: white;
+      }
+    </style>
+    <script>
+      "use strict"
+      async function get() {
+        const url = new URL(document.getElementById("url").value)
+        const stat = document.getElementById("stat")
+        const body = document.getElementById("body")
+        stat.innerText = "Pending..."
+        body.innerText = ""
+
+        // Go get 'er
+        try {
+          const res = await fetch(url)
+          stat.innerText = res.status + " " + res.statusText
+          body.innerText = await res.text()
+        } catch (e) {
+          stat.innerText = e
+        }
+      }
+    </script>
+  </head>
+  <body>GET.html
+By Dylan Sharhon
+<hr><form onsubmit="get(); return false">
+URL <input id="url" value="http://localhost:80/" size="100">
+
+<input type="submit" value="  GET  "></form>
+
+<hr>
+RESPONSE STATUS
+
+<div id="stat"></div>
+RESPONSE BODY
+
+<div id="body"></div>
+</body>
+</html>

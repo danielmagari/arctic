@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>POST</title>
+    <style>
+      body, input, textarea {
+        font-family: monospace;
+        white-space: pre;
+      }
+      body {
+        background: lightgreen;
+        min-width: 480px;
+        margin: 16px;
+      }
+      div {
+        background: white;
+      }
+      textarea {
+        width: 100%;
+      }
+    </style>
+    <script>
+      async function post () {
+        const url = new URL(document.getElementById("url").value)
+        const content = document.getElementById("content").value
+        const res = document.getElementById("res")
+        res.innerText = ""
+
+        // Go get 'er
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: content
+          })
+          res.innerText = response.status + " " + response.statusText
+        } catch (e) {
+          res.innerText = e
+        }
+      }
+      function clear () {
+        document.getElementById("content").value = ""
+      }
+    </script>
+  </head>
+  <body>POST.html
+By Dylan Sharhon
+<hr><form onsubmit="post(); return false">
+URL <input id="url" value="http://localhost:80/" size="64">
+
+CONTENT BODY
+
+<textarea id="content" oninput="style.height = scrollHeight+'px'" ondblclick="this.select()"></textarea>
+
+<input type="submit" value="  POST  "></form>
+
+<hr>
+RESPONSE STATUS
+
+<div id="res"></div>
+</body>
+</html>

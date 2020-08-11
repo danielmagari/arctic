@@ -1,0 +1,40 @@
+// ratrod api v1.0
+////////////////////////////////////////////////////////////////////////////////////////////////////
+const logger = console
+const ratrod = require("ratrod")
+const rr = ratrod (80, "0.0.0.0", "localhost", logger) // all parameters optional
+
+rr["GET /some/path-name"] = function onGetSomething (req) {
+  throw error                                     // kills connection instantly, prints error
+  return <falsey = "" 0 [] {} undefined>          // responds 404
+  return <truthy = "string" object>               // responds 200 OK + "string" or object.toString()
+}
+
+rr["POST /some/path-name"] = function onPostSomething (req) {
+  throw error                                     // kills connection instantly, prints error
+  return <falsey = "" 0 [] {} undefined>          // responds 500
+  return <truthy = "string" object>               // responds 200 OK
+}
+
+// Example request object:
+var req = {
+  from: "raw ip address of remote client",
+  msg:  "raw http request",
+  head: "raw http head",
+  body: "raw http body",                          // you'll want this for POSTs
+  url: {                                          // standard validated WHATWG URL object
+    protocol: "http:",
+    username: "", password: "",
+    host:     "client.provided",                  // falls back to the one you specified
+    pathname: "/path/name",
+    searchParams: {                               // standard WHATWG URLSearchParams
+      get("key"),                                 // "value" or null
+      has("key"),
+      entries()
+    }
+    hash:     "#some-hash"                        // probably not sent to server?
+  }
+}
+
+Pro tip:
+var cookie = (req.head.match(/(?<=^Cookie: ).+(?=\r\n)/i) || [])[0]

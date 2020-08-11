@@ -1,0 +1,23 @@
+{
+  "name": "ratrod",
+  "version": "0.4.0",
+  "description": "A no-nonsense HTTP router in ~100 LOC",
+  "main": "ratrod.js",
+  "engines": {
+    "node": ">= 10"
+  },
+  "keywords": [
+    "server",
+    "router",
+    "REST",
+    "API",
+    "response",
+    "framework",
+    "express",
+    "koa",
+    "simple",
+    "minimalist"
+  ],
+  "author": "Dylan Sharhon",
+  "license": "MIT"
+}
